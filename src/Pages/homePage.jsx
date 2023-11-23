@@ -159,6 +159,68 @@ const SwitchSlider = styled.span`
   }
 `;
 
+const Dias = styled.h4`
+font-size: 40px;
+font-weight: 400;
+line-height: 48px;
+letter-spacing: 0em;
+text-align: left;
+font-family: 'Poppins', sans-serif;
+color: #222222;
+align-items: center;
+cursor: pointer;
+
+`
+
+const Semanas = styled.h5`
+font-family: 'Poppins', sans-serif;
+font-size: 40px;
+font-weight: 400;
+line-height: 48px;
+letter-spacing: 0em;
+text-align: left;
+color: #C8C8C8;
+align-items: center;
+cursor: pointer;
+
+`
+const ConteinerInfoDias = styled.div`
+display: flex;
+flex-direction: row;
+gap: 25px;
+margin-left: 37px;
+margin-top: 15px;
+align-items: center;
+`
+const Titulo = styled.h1`
+font-family: 'Poppins', sans-serif;
+font-size: 76px;
+font-weight: 400;
+line-height: 48px;
+text-align: left;
+align-items: center;
+
+
+`
+
+const SubTitulo = styled.p`
+font-family: 'Poppins', sans-serif;
+font-size: 15px;
+font-weight: 400;
+line-height: 48px;
+text-align: left;
+align-items: center;
+
+`
+
+const ConteinerCidades = styled.div`
+display: flex;
+flex-direction: column;
+gap: 5px;
+margin-left: 25px;
+margin-top: 35px;
+`
+
 export default function Home() {
  
 
@@ -189,7 +251,14 @@ export default function Home() {
 
       </MenuEsquerda>
       <AreaLateral>
-        {/* Adicione o conteúdo da área lateral aqui */}
+      <ConteinerInfoDias>
+      <Dias>Hoje</Dias>
+      <Semanas>Proximos dias</Semanas>
+      </ConteinerInfoDias>
+      <ConteinerCidades>
+      <Titulo>São Paulo</Titulo>
+      <SubTitulo>Lat:  44.34  Long: 10.99</SubTitulo>
+      </ConteinerCidades>
       </AreaLateral>
     </Container>
   );
