@@ -278,6 +278,65 @@ margin-top: 5px;
 margin-left: 15px;
 `
 
+const InfosBottom = styled.div`
+  display: flex;
+justify-content: center;
+flex-direction: row;
+gap:80px;
+margin-top: 10px;
+`
+const Vel = styled.div`
+  width: 300px;
+height: 145px;
+border-radius: 32px;
+background: linear-gradient(117.33deg, #4D4494 22.83%, #4F43AE 90.03%);
+box-shadow: 0px 24px 48px 0px #314F7C14;
+`
+const Umidade = styled.div`
+width: 300px;
+height: 145px;
+border-radius: 32px;
+background: linear-gradient(117.33deg, #4D4494 22.83%, #4F43AE 90.03%);
+box-shadow: 0px 24px 48px 0px #314F7C14;
+`
+const InfosVel = styled.p`
+  font-family: 'Poppins', sans-serif;
+font-size: 17px;
+font-weight: 700;
+line-height: 24px;
+letter-spacing: 0em;
+text-align: left;
+color: #FFFFFF;
+text-align: justify;
+margin-top: 35px;
+margin-left: 15px;
+`
+const InfosUmidade = styled.p`
+  font-family: 'Poppins', sans-serif;
+font-size: 17px;
+font-weight: 700;
+line-height: 24px;
+letter-spacing: 0em;
+text-align: left;
+color: #FFFFFF;
+text-align: justify;
+margin-top: 35px;
+margin-left: 15px;
+`
+
+const InfosVelUmidade = styled.h4`
+  font-family: 'Poppins', sans-serif;
+font-size: 32px;
+font-weight: 600;
+line-height: 36px;
+letter-spacing: 0em;
+text-align: left;
+color: #FFFFFF;
+text-align: justify;
+margin-top: 5px;
+margin-left: 15px;
+`
+
 
 export default function Home() {
   const [cidade, setCidade] = useState('');
@@ -293,7 +352,6 @@ export default function Home() {
         `https://api.openweathermap.org/data/2.5/weather?q=${cidade}&units=metric&appid=8b196609e696469d9f311f5830006ad4`
       );
 
-      // Atualize o estado com os dados da resposta
       setClimaAtual(resposta.data);
 
       if (resposta.data.main) {
@@ -303,12 +361,10 @@ export default function Home() {
         setTemperaturaMaxima(resposta.data.main.temp_max);
       }
 
-      // Agora, obtenha a previsão para os próximos dias
       const respostaPrevisao = await axios.get(
         `https://api.openweathermap.org/data/2.5/forecast?q=${cidade}&units=metric&appid=8b196609e696469d9f311f5830006ad4`
       );
 
-      // Atualize o estado com os dados da previsão
       setPrevisaoProximosDias(respostaPrevisao.data.list);
     } catch (erro) {
       console.error('Erro ao buscar dados do clima:', erro);
@@ -318,7 +374,6 @@ export default function Home() {
   };
 
   useEffect(() => {
-    // Verifique se a cidade está vazia antes de iniciar a busca
     if (cidade) {
       buscarClima();
     }
@@ -371,6 +426,17 @@ export default function Home() {
       <InfoGrau>{climaAtual?.main?.temp_max}° C</InfoGrau>
       </ConteinerMinima>
       </InfosTop>
+      <InfosBottom>
+        <Umidade>
+        <InfosUmidade>umidade</InfosUmidade>
+        <InfosVelUmidade>{climaAtual?.main?.humidity}%</InfosVelUmidade>
+        </Umidade>
+        <Vel>
+        <InfosVel>Velocidade do vento</InfosVel>
+        <InfosVelUmidade>{climaAtual?.wind?.speed} m/s</InfosVelUmidade>
+        </Vel>
+      </InfosBottom>
+      
       </AreaLateral>
     </Container>
   );
