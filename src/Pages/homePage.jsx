@@ -370,6 +370,7 @@ export default function Home() {
       console.error('Erro ao buscar dados do clima:', erro);
     } finally {
       setBuscandoClima(false);
+      
     }
   };
 
@@ -378,6 +379,11 @@ export default function Home() {
       buscarClima();
     }
   }, [cidade]);
+
+  const dataAtual = new Date();
+  const diaSemana = new Intl.DateTimeFormat('pt-BR', { weekday: 'long' }).format(dataAtual);
+  const horario = dataAtual.toLocaleTimeString('pt-BR');
+
   return (
     <Container>
       <GlobalStyle />
@@ -396,8 +402,8 @@ export default function Home() {
           <Divisor />
         </ConteinerMeio>
         <ConteinerParagrafo>
-          <Paragrafo>{climaAtual?.dt_txt}</Paragrafo>
-          <Paragrafo>Quinta-feira, 16:32</Paragrafo>
+          <Paragrafo>{diaSemana}, {horario}</Paragrafo>
+          <Paragrafo>{dataAtual.toLocaleDateString('pt-BR')}</Paragrafo>
         </ConteinerParagrafo>
     
 {/* <SwitchContainer>
