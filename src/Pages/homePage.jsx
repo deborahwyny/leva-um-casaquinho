@@ -4,7 +4,7 @@ import LogoCasaquinho from "../Assets/logocasaquinho.png";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSearch, faSun, faMoon } from "@fortawesome/free-solid-svg-icons";
 import axios from 'axios';
-import { format } from 'date-fns';
+import { LineChart, Line, XAxis, YAxis, Tooltip, Legend, CartesianGrid } from 'recharts';
 
 
 const GlobalStyle = createGlobalStyle`
@@ -343,6 +343,7 @@ export default function Home() {
   const [climaAtual, setClimaAtual] = useState(null);
   const [previsaoProximosDias, setPrevisaoProximosDias] = useState([]);
   const [buscandoClima, setBuscandoClima] = useState(false);
+  const [exibirGrafico, setExibirGrafico] = useState(false);
 
   const buscarClima = async () => {
     try {
@@ -354,13 +355,6 @@ export default function Home() {
 
       setClimaAtual(resposta.data);
 
-      if (resposta.data.main) {
-        console.log('Temperatura Mínima:', resposta.data.main.temp_min);
-        console.log('Temperatura Máxima:', resposta.data.main.temp_max);
-        setTemperaturaMinima(resposta.data.main.temp_min);
-        setTemperaturaMaxima(resposta.data.main.temp_max);
-      }
-
       const respostaPrevisao = await axios.get(
         `https://api.openweathermap.org/data/2.5/forecast?q=${cidade}&units=metric&appid=8b196609e696469d9f311f5830006ad4`
       );
@@ -370,7 +364,6 @@ export default function Home() {
       console.error('Erro ao buscar dados do clima:', erro);
     } finally {
       setBuscandoClima(false);
-      
     }
   };
 
@@ -379,6 +372,10 @@ export default function Home() {
       buscarClima();
     }
   }, [cidade]);
+
+  const handleMostrarGrafico = () => {
+    setExibirGrafico(true);
+  };
 
   const dataAtual = new Date();
   const diaSemana = new Intl.DateTimeFormat('pt-BR', { weekday: 'long' }).format(dataAtual);
@@ -390,60 +387,72 @@ export default function Home() {
       <MenuEsquerda>
         <ConteinerTopo>
           <Logo src={LogoCasaquinho} alt="logo casaquinho" />
-          <Input   type="text"
-  value={cidade}
-  onChange={(e) => setCidade(e.target.value)}
-  placeholder="Procure por uma cidade"/>
-          <SearchIcon icon={faSearch} onClick={buscarClima} />
+          <Input
+            type="text"
+            value={cidade}
+            onChange={(e) => setCidade(e.target.value)}
+            placeholder="Procure por uma cidade"
+          />
+          
+            <SearchIcon icon={faSearch} onClick={buscarClima} />
+        
         </ConteinerTopo>
         <ConteinerMeio>
-          <Temperatura>{climaAtual?.main?.temp}°C</Temperatura>
-          <Sub>{climaAtual?.weather[0]?.description}</Sub>
+         
+              <Temperatura>{climaAtual?.main?.temp}°C</Temperatura>
+              <Sub>{climaAtual?.weather[0]?.description}</Sub>
           <Divisor />
         </ConteinerMeio>
         <ConteinerParagrafo>
           <Paragrafo>{diaSemana}, {horario}</Paragrafo>
           <Paragrafo>{dataAtual.toLocaleDateString('pt-BR')}</Paragrafo>
         </ConteinerParagrafo>
-    
-{/* <SwitchContainer>
-  <SwitchLabel htmlFor="lightModeSwitch">Light Mode</SwitchLabel>
-  <SwitchInput type="checkbox" id="lightModeSwitch" />
-  <SwitchSlider />
-</SwitchContainer> */}
-
       </MenuEsquerda>
       <AreaLateral>
       <ConteinerInfoDias>
-      <Dias>Hoje</Dias>
-      <Semanas>Proximos dias</Semanas>
-      </ConteinerInfoDias>
-      <ConteinerCidades>
-      <Titulo>{cidade}</Titulo>
-      <SubTitulo>Lat:  {climaAtual?.coord?.lat}  Long: {climaAtual?.coord?.lon}</SubTitulo>
-      </ConteinerCidades>
-      <InfosTop>
-      <ConteinerMinima>
-        <Minima>Mínima</Minima>
-        <InfoGrau>{climaAtual?.main?.temp_min}° C</InfoGrau>
-      </ConteinerMinima>
-      <ConteinerMinima>
-      <Maxima>Máxima</Maxima>
-      <InfoGrau>{climaAtual?.main?.temp_max}° C</InfoGrau>
-      </ConteinerMinima>
-      </InfosTop>
-      <InfosBottom>
-        <Umidade>
-        <InfosUmidade>umidade</InfosUmidade>
-        <InfosVelUmidade>{climaAtual?.main?.humidity}%</InfosVelUmidade>
-        </Umidade>
-        <Vel>
-        <InfosVel>Velocidade do vento</InfosVel>
-        <InfosVelUmidade>{climaAtual?.wind?.speed} m/s</InfosVelUmidade>
-        </Vel>
-      </InfosBottom>
-      
+          <Dias>Hoje</Dias>
+          <Semanas onClick={handleMostrarGrafico}>Próximos dias</Semanas>
+        </ConteinerInfoDias>
+        <ConteinerCidades>
+          <Titulo>{cidade}</Titulo>
+          <SubTitulo>Lat: {climaAtual?.coord?.lat} Long: {climaAtual?.coord?.lon}</SubTitulo>
+        </ConteinerCidades>
+        {exibirGrafico ? (
+          <ConteinerMeio>
+            <LineChart width={400} height={300} data={previsaoProximosDias}>
+              <CartesianGrid strokeDasharray="3 3" />
+              <XAxis dataKey="dt_txt" />
+              <YAxis />
+              <Tooltip />
+              <Legend />
+              <Line type="monotone" dataKey="main.temp" stroke="#8884d8" />
+            </LineChart>
+          </ConteinerMeio>
+        ) : (
+          <>
+            <InfosTop>
+              <ConteinerMinima>
+                <Minima>Mínima</Minima>
+                <InfoGrau>{climaAtual?.main?.temp_min}° C</InfoGrau>
+              </ConteinerMinima>
+              <ConteinerMinima>
+                <Maxima>Máxima</Maxima>
+                <InfoGrau>{climaAtual?.main?.temp_max}° C</InfoGrau>
+              </ConteinerMinima>
+            </InfosTop>
+            <InfosBottom>
+              <Umidade>
+                <InfosUmidade>umidade</InfosUmidade>
+                <InfosVelUmidade>{climaAtual?.main?.humidity}%</InfosVelUmidade>
+              </Umidade>
+              <Vel>
+                <InfosVel>Velocidade do vento</InfosVel>
+                <InfosVelUmidade>{climaAtual?.wind?.speed} m/s</InfosVelUmidade>
+              </Vel>
+            </InfosBottom>
+          </>
+        )}
       </AreaLateral>
     </Container>
   );
-  }
+}
