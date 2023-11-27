@@ -223,6 +223,61 @@ gap: 5px;
 margin-left: 25px;
 margin-top: 35px;
 `
+const ConteinerMinima = styled.div`
+width: 300px;
+height: 145px;
+border-radius: 32px;
+background: linear-gradient(117.33deg, #4D4494 22.83%, #4F43AE 90.03%);
+box-shadow: 0px 24px 48px 0px #314F7C14;
+`
+const InfosTop = styled.div`
+display: flex;
+justify-content: center;
+flex-direction: row;
+gap:80px;
+margin-top: 10px;
+  
+`
+const Minima = styled.p`
+font-family: 'Poppins', sans-serif;
+font-size: 17px;
+font-weight: 700;
+line-height: 24px;
+letter-spacing: 0em;
+text-align: left;
+color: #FFFFFF;
+text-align: justify;
+margin-top: 35px;
+margin-left: 15px;
+
+`
+
+const Maxima = styled.p`
+  font-family: 'Poppins', sans-serif;
+font-size: 17px;
+font-weight: 700;
+line-height: 24px;
+letter-spacing: 0em;
+text-align: left;
+color: #FFFFFF;
+text-align: justify;
+margin-top: 35px;
+margin-left: 15px;
+
+`
+const InfoGrau = styled.h4`
+font-family: 'Poppins', sans-serif;
+font-size: 32px;
+font-weight: 600;
+line-height: 36px;
+letter-spacing: 0em;
+text-align: left;
+color: #FFFFFF;
+text-align: justify;
+margin-top: 5px;
+margin-left: 15px;
+`
+
 
 export default function Home() {
   const [cidade, setCidade] = useState('');
@@ -240,6 +295,13 @@ export default function Home() {
 
       // Atualize o estado com os dados da resposta
       setClimaAtual(resposta.data);
+
+      if (resposta.data.main) {
+        console.log('Temperatura Mínima:', resposta.data.main.temp_min);
+        console.log('Temperatura Máxima:', resposta.data.main.temp_max);
+        setTemperaturaMinima(resposta.data.main.temp_min);
+        setTemperaturaMaxima(resposta.data.main.temp_max);
+      }
 
       // Agora, obtenha a previsão para os próximos dias
       const respostaPrevisao = await axios.get(
@@ -279,7 +341,7 @@ export default function Home() {
           <Divisor />
         </ConteinerMeio>
         <ConteinerParagrafo>
-          <Paragrafo>{climaAtual?.dt_txt ? format(new Date(climaAtual?.dt_txt), 'dd/MM/yyyy, HH:mm') : ''}</Paragrafo>
+          <Paragrafo>{climaAtual?.dt_txt}</Paragrafo>
           <Paragrafo>Quinta-feira, 16:32</Paragrafo>
         </ConteinerParagrafo>
     
@@ -299,6 +361,16 @@ export default function Home() {
       <Titulo>{cidade}</Titulo>
       <SubTitulo>Lat:  {climaAtual?.coord?.lat}  Long: {climaAtual?.coord?.lon}</SubTitulo>
       </ConteinerCidades>
+      <InfosTop>
+      <ConteinerMinima>
+        <Minima>Mínima</Minima>
+        <InfoGrau>{climaAtual?.main?.temp_min}° C</InfoGrau>
+      </ConteinerMinima>
+      <ConteinerMinima>
+      <Maxima>Máxima</Maxima>
+      <InfoGrau>{climaAtual?.main?.temp_max}° C</InfoGrau>
+      </ConteinerMinima>
+      </InfosTop>
       </AreaLateral>
     </Container>
   );
