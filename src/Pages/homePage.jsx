@@ -475,11 +475,22 @@ export default function Home() {
         `https://api.openweathermap.org/data/2.5/weather?q=${cidade}&units=metric&appid=8b196609e696469d9f311f5830006ad4`
       );
 
-      setClimaAtual(resposta.data);
-
       const respostaPrevisao = await axios.get(
         `https://api.openweathermap.org/data/2.5/forecast?q=${cidade}&units=metric&appid=8b196609e696469d9f311f5830006ad4`
       );
+
+      // Encontrar a temperatura mínima e máxima na previsão dos próximos dias
+      const temperaturaMinima = Math.min(...respostaPrevisao.data.list.map((item) => item.main.temp_min));
+      const temperaturaMaxima = Math.max(...respostaPrevisao.data.list.map((item) => item.main.temp_max));
+
+      setClimaAtual({
+        ...resposta.data,
+        main: {
+          ...resposta.data.main,
+          temp_min: temperaturaMinima,
+          temp_max: temperaturaMaxima,
+        },
+      });
 
       setPrevisaoProximosDias(respostaPrevisao.data.list);
     } catch (erro) {
@@ -503,7 +514,6 @@ export default function Home() {
   const dataAtual = new Date();
   const diaSemana = new Intl.DateTimeFormat('pt-BR', { weekday: 'long' }).format(dataAtual);
   const horario = dataAtual.toLocaleTimeString('pt-BR');
-
   return (
     <Container>
       <GlobalStyle />
