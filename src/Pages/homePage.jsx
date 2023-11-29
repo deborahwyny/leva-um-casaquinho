@@ -459,6 +459,14 @@ flex-direction:column;
 }
 `
 
+const Casaquinho = styled.p`
+color: #AFADAD;
+margin-top: 40px;
+margin-left: 10px;
+font-size: 20px;
+font-family: 'Poppins', sans-serif;
+`
+
 export default function Home() {
   const [cidade, setCidade] = useState('');
   const [climaAtual, setClimaAtual] = useState(null);
@@ -471,30 +479,17 @@ export default function Home() {
     try {
       setBuscandoClima(true);
 
-      const resposta = await axios.get(
-        `https://api.openweathermap.org/data/2.5/weather?q=${cidade}&units=metric&appid=8b196609e696469d9f311f5830006ad4`
-      );
+      const resposta = await axios.get(`https://api.openweathermap.org/data/2.5/weather?q=${cidade}&units=metric&appid=8b196609e696469d9f311f5830006ad4`);
 
-      const respostaPrevisao = await axios.get(
-        `https://api.openweathermap.org/data/2.5/forecast?q=${cidade}&units=metric&appid=8b196609e696469d9f311f5830006ad4`
-      );
+      const respostaPrevisao = await axios.get(`https://api.openweathermap.org/data/2.5/forecast?q=${cidade}&units=metric&appid=8b196609e696469d9f311f5830006ad4`);
 
-      // Encontrar a temperatura mínima e máxima na previsão dos próximos dias
       const temperaturaMinima = Math.min(...respostaPrevisao.data.list.map((item) => item.main.temp_min));
       const temperaturaMaxima = Math.max(...respostaPrevisao.data.list.map((item) => item.main.temp_max));
 
-      setClimaAtual({
-        ...resposta.data,
-        main: {
-          ...resposta.data.main,
-          temp_min: temperaturaMinima,
-          temp_max: temperaturaMaxima,
-        },
-      });
-
+      setClimaAtual({...resposta.data,main: {...resposta.data.main,temp_min: temperaturaMinima,temp_max: temperaturaMaxima,},
+});
       setPrevisaoProximosDias(respostaPrevisao.data.list);
     } catch (erro) {
-      console.error('Erro ao buscar dados do clima:', erro);
     } finally {
       setBuscandoClima(false);
     }
@@ -509,6 +504,20 @@ export default function Home() {
   const handleMostrarGrafico = () => {
     setExibirGrafico(!exibirGrafico);
     setMostrarHoje(false);
+  };
+
+  const getTextColor = () => {
+    const conditions = {
+      Clear: 'orange',
+      Clouds: 'gray',
+      Rain: 'blue',
+      Snow: 'lightgray',
+      Thunderstorm: 'purple',
+      Drizzle: 'lightblue',
+      Mist: 'lightgray',
+    };
+  
+    return conditions[climaAtual?.weather[0]?.main] || 'white';
   };
 
   const dataAtual = new Date();
@@ -529,8 +538,8 @@ export default function Home() {
           <SearchIcon icon={faSearch} onClick={buscarClima} />
         </ConteinerTopo>
         <ConteinerMeio>
-          <Temperatura>{climaAtual?.main?.temp}°C</Temperatura>
-          <Sub>{climaAtual?.weather[0]?.description}</Sub>
+          <Temperatura style={{ color: getTextColor() }}>{climaAtual?.main?.temp}°C</Temperatura>
+          <Sub style={{ color: getTextColor() }}>{climaAtual?.weather[0]?.description}</Sub>
           <Divisor />
         </ConteinerMeio>
         <ConteinerParagrafo>
@@ -569,6 +578,7 @@ export default function Home() {
                 <InfosVelUmidade>{climaAtual?.wind?.speed} m/s</InfosVelUmidade>
               </Vel>
             </InfosBottom>
+            <Casaquinho>  {climaAtual?.main?.temp_max < 17 && ' - Recomendado um casaquinho' || 'não, você não deve usar um casaquinho'}</Casaquinho>
           </>
         )}
         {exibirGrafico && (
