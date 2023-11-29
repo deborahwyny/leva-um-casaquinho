@@ -5,6 +5,8 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSearch, faSun, faMoon } from "@fortawesome/free-solid-svg-icons";
 import axios from 'axios';
 import { LineChart, Line, XAxis, YAxis, Tooltip, Legend, CartesianGrid } from 'recharts';
+import { format } from 'date-fns';
+
 
 
 const GlobalStyle = createGlobalStyle`
@@ -337,12 +339,12 @@ margin-top: 5px;
 margin-left: 15px;
 `
 
-
 export default function Home() {
   const [cidade, setCidade] = useState('');
   const [climaAtual, setClimaAtual] = useState(null);
   const [previsaoProximosDias, setPrevisaoProximosDias] = useState([]);
   const [buscandoClima, setBuscandoClima] = useState(false);
+  const [mostrarHoje, setMostrarHoje] = useState(true);
   const [exibirGrafico, setExibirGrafico] = useState(false);
 
   const buscarClima = async () => {
@@ -374,7 +376,8 @@ export default function Home() {
   }, [cidade]);
 
   const handleMostrarGrafico = () => {
-    setExibirGrafico(true);
+    setExibirGrafico(!exibirGrafico);
+    setMostrarHoje(false);
   };
 
   const dataAtual = new Date();
@@ -393,14 +396,11 @@ export default function Home() {
             onChange={(e) => setCidade(e.target.value)}
             placeholder="Procure por uma cidade"
           />
-          
-            <SearchIcon icon={faSearch} onClick={buscarClima} />
-        
+          <SearchIcon icon={faSearch} onClick={buscarClima} />
         </ConteinerTopo>
         <ConteinerMeio>
-         
-              <Temperatura>{climaAtual?.main?.temp}°C</Temperatura>
-              <Sub>{climaAtual?.weather[0]?.description}</Sub>
+          <Temperatura>{climaAtual?.main?.temp}°C</Temperatura>
+          <Sub>{climaAtual?.weather[0]?.description}</Sub>
           <Divisor />
         </ConteinerMeio>
         <ConteinerParagrafo>
@@ -409,26 +409,15 @@ export default function Home() {
         </ConteinerParagrafo>
       </MenuEsquerda>
       <AreaLateral>
-      <ConteinerInfoDias>
-          <Dias>Hoje</Dias>
+        <ConteinerInfoDias>
+          <Dias onClick={() => {setExibirGrafico(false); setMostrarHoje(true);}} className={mostrarHoje ? 'ativo' : ''}>Hoje</Dias>
           <Semanas onClick={handleMostrarGrafico}>Próximos dias</Semanas>
         </ConteinerInfoDias>
         <ConteinerCidades>
           <Titulo>{cidade}</Titulo>
           <SubTitulo>Lat: {climaAtual?.coord?.lat} Long: {climaAtual?.coord?.lon}</SubTitulo>
         </ConteinerCidades>
-        {exibirGrafico ? (
-          <ConteinerMeio>
-            <LineChart width={400} height={300} data={previsaoProximosDias}>
-              <CartesianGrid strokeDasharray="3 3" />
-              <XAxis dataKey="dt_txt" />
-              <YAxis />
-              <Tooltip />
-              <Legend />
-              <Line type="monotone" dataKey="main.temp" stroke="#8884d8" />
-            </LineChart>
-          </ConteinerMeio>
-        ) : (
+        {mostrarHoje && (
           <>
             <InfosTop>
               <ConteinerMinima>
@@ -451,6 +440,18 @@ export default function Home() {
               </Vel>
             </InfosBottom>
           </>
+        )}
+        {exibirGrafico && (
+          <ConteinerMeio>
+            <LineChart width={600} height={300} data={previsaoProximosDias}>
+              <CartesianGrid stroke="#ccc" fill="#fff" />
+              <XAxis dataKey="dt_txt" tickFormatter={(value) => format(new Date(value), 'dd/MM (eee)')} fill="#fff" />
+              <YAxis tickFormatter={(value) => `${value}°C`} />
+              <Tooltip />
+              <Legend />
+              <Line type="natural" dataKey="main.temp" stroke="#8884d8" />
+            </LineChart>
+          </ConteinerMeio>
         )}
       </AreaLateral>
     </Container>
