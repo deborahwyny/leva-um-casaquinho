@@ -19,22 +19,37 @@ const Container = styled.div`
   display: flex;
   width: 100vw;
   height: 100vh;
+  @media (max-width: 700px) {
+    display:flex;
+    flex-direction: column;
+    }
 `;
 const MenuEsquerda = styled.div`
   background-color: #ffffff;
   width: 35%;
   display: flex;
   flex-direction: column;
+  @media (max-width: 700px) {
+    display:flex;
+    flex-direction: column;
+    width: 100%;
+    }
 `;
 
 const Logo = styled.img`
   width: 80%;
   padding-top: 5%;
+  
 `;
 
 const AreaLateral = styled.div`
   background-color: #efefef;
   width: 65%;
+  @media (max-width: 700px) {
+    display:flex;
+    flex-direction: column;
+    width: 100%;
+    }
 `;
 
 const ConteinerTopo = styled.div`
@@ -60,6 +75,11 @@ const Input = styled.input`
   &::placeholder {
     padding-left: 20px;
   }
+
+  @media (max-width: 700px) {
+    width: 76%;
+  }
+  
 `;
 
 const SearchIcon = styled(FontAwesomeIcon)`
@@ -69,6 +89,9 @@ const SearchIcon = styled(FontAwesomeIcon)`
   transform: translateY(-50%);
   color: #999; 
   cursor: pointer;
+  @media (max-width: 700px) {
+    display:none
+    }
 `;
 
 const Temperatura = styled.h2`
@@ -116,6 +139,9 @@ const ConteinerParagrafo = styled.div`
   flex-direction: column;
   margin-top: 44px;
   gap: 4px;
+  @media (max-width: 700px) {
+  margin-bottom: 20px;
+}
 `;
 
 // const SwitchContainer = styled.div`
@@ -196,6 +222,10 @@ gap: 25px;
 margin-left: 37px;
 margin-top: 15px;
 align-items: center;
+@media (max-width: 700px) {
+display:flex;
+justify-content: center;
+}
 `
 const Titulo = styled.h1`
 font-family: 'Poppins', sans-serif;
@@ -204,8 +234,11 @@ font-weight: 400;
 line-height: 48px;
 text-align: left;
 align-items: center;
-
-
+@media (max-width: 700px) {
+display:flex;
+justify-content: center;
+font-size: 53px;
+}
 `
 
 const SubTitulo = styled.p`
@@ -215,6 +248,10 @@ font-weight: 400;
 line-height: 48px;
 text-align: left;
 align-items: center;
+@media (max-width: 700px) {
+display:flex;
+justify-content: center;
+}
 
 `
 
@@ -231,6 +268,14 @@ height: 145px;
 border-radius: 32px;
 background: linear-gradient(117.33deg, #4D4494 22.83%, #4F43AE 90.03%);
 box-shadow: 0px 24px 48px 0px #314F7C14;
+@media (max-width: 700px) {
+display:flex;
+justify-content: center;
+align-items: center;
+flex-direction: column;
+text-align: center;
+
+}
 `
 const InfosTop = styled.div`
 display: flex;
@@ -238,6 +283,14 @@ justify-content: center;
 flex-direction: row;
 gap:80px;
 margin-top: 10px;
+@media (max-width: 700px) {
+display:flex;
+justify-content: center;
+flex-direction: column;
+align-items: center;
+gap: 5px;
+
+}
   
 `
 const Minima = styled.p`
@@ -251,6 +304,11 @@ color: #FFFFFF;
 text-align: justify;
 margin-top: 35px;
 margin-left: 15px;
+@media (max-width: 700px) {
+display:flex;
+justify-content: center;
+margin-top: 0px;
+}
 
 `
 
@@ -265,6 +323,12 @@ color: #FFFFFF;
 text-align: justify;
 margin-top: 35px;
 margin-left: 15px;
+@media (max-width: 700px) {
+display:flex;
+justify-content: center;
+text-align: center;
+margin-top: 0px;
+}
 
 `
 const InfoGrau = styled.h4`
@@ -278,6 +342,14 @@ color: #FFFFFF;
 text-align: justify;
 margin-top: 5px;
 margin-left: 15px;
+@media (max-width: 700px) {
+display:flex;
+justify-content: center;
+text-align: center;
+align-items: center;
+
+}
+
 `
 
 const InfosBottom = styled.div`
@@ -286,6 +358,14 @@ justify-content: center;
 flex-direction: row;
 gap:80px;
 margin-top: 10px;
+@media (max-width: 700px) {
+display:flex;
+justify-content: center;
+flex-direction: column;
+align-items: center;
+gap: 5px;
+
+}
 `
 const Vel = styled.div`
   width: 300px;
@@ -293,6 +373,15 @@ height: 145px;
 border-radius: 32px;
 background: linear-gradient(117.33deg, #4D4494 22.83%, #4F43AE 90.03%);
 box-shadow: 0px 24px 48px 0px #314F7C14;
+@media (max-width: 700px) {
+display:flex;
+justify-content: center;
+text-align: center;
+align-items: center;
+flex-direction: column;
+
+
+}
 `
 const Umidade = styled.div`
 width: 300px;
@@ -300,6 +389,14 @@ height: 145px;
 border-radius: 32px;
 background: linear-gradient(117.33deg, #4D4494 22.83%, #4F43AE 90.03%);
 box-shadow: 0px 24px 48px 0px #314F7C14;
+@media (max-width: 700px) {
+display:flex;
+justify-content: center;
+text-align: center;
+align-items: center;
+flex-direction: column;
+
+}
 `
 const InfosVel = styled.p`
   font-family: 'Poppins', sans-serif;
@@ -312,6 +409,13 @@ color: #FFFFFF;
 text-align: justify;
 margin-top: 35px;
 margin-left: 15px;
+@media (max-width: 700px) {
+display:flex;
+justify-content: center;
+text-align: center;
+align-items: center;
+margin-top: 0px;
+}
 `
 const InfosUmidade = styled.p`
   font-family: 'Poppins', sans-serif;
@@ -324,6 +428,14 @@ color: #FFFFFF;
 text-align: justify;
 margin-top: 35px;
 margin-left: 15px;
+@media (max-width: 700px) {
+display:flex;
+justify-content: center;
+text-align: center;
+align-items: center;
+margin-top: 0px;
+
+}
 `
 
 const InfosVelUmidade = styled.h4`
@@ -337,6 +449,14 @@ color: #FFFFFF;
 text-align: justify;
 margin-top: 5px;
 margin-left: 15px;
+@media (max-width: 700px) {
+display:flex;
+justify-content: center;
+text-align: center;
+align-items: center;
+flex-direction:column;
+
+}
 `
 
 export default function Home() {
